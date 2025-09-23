@@ -1,0 +1,114 @@
+2025-09-24 02:20:25,063 INFO Downloading 2 file(s)
+2025-09-24 02:20:25,064 INFO Downloading https://example.com/file1.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\file1.nc
+2025-09-24 02:20:27,290 ERROR Failed to download https://example.com/file1.nc: 404 Client Error: Not Found for url: https://example.com/file1.nc
+2025-09-24 02:20:27,291 INFO Downloading https://example.com/file2.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\file2.nc
+2025-09-24 02:20:28,895 ERROR Failed to download https://example.com/file2.nc: 404 Client Error: Not Found for url: https://example.com/file2.nc
+2025-09-24 02:26:26,015 INFO No URLs provided; using default GDAC/DAC seeds and recursive crawl.
+2025-09-24 02:26:26,016 INFO Processing 2 seed URL(s)
+2025-09-24 02:26:36,850 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250624_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250624_prof_0.nc
+2025-09-24 02:26:55,296 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250624_prof_0.nc
+2025-09-24 02:26:55,298 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250625_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250625_prof_0.nc
+2025-09-24 02:27:41,537 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250625_prof_0.nc
+2025-09-24 02:27:41,540 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250626_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250626_prof_0.nc
+2025-09-24 02:30:03,006 INFO No URLs provided; using default GDAC/DAC seeds and recursive crawl.
+2025-09-24 02:30:03,006 INFO Processing 2 seed URL(s)
+2025-09-24 02:30:14,453 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250624_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250624_prof_0.nc
+2025-09-24 02:30:14,454 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250625_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250625_prof_0.nc
+2025-09-24 02:30:14,454 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250626_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250626_prof_0.nc
+2025-09-24 02:30:14,455 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250627_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250627_prof_0.nc
+2025-09-24 02:30:14,456 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250627_prof_1.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250627_prof_1.nc
+2025-09-24 02:30:14,459 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250628_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250628_prof_0.nc
+2025-09-24 02:30:14,461 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250628_prof_1.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250628_prof_1.nc
+2025-09-24 02:30:14,464 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250628_prof_2.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250628_prof_2.nc
+2025-09-24 02:30:36,921 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250625_prof_0.nc
+2025-09-24 02:30:36,929 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250630_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250630_prof_0.nc
+2025-09-24 02:30:42,014 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250624_prof_0.nc
+2025-09-24 02:30:42,017 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250701_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250701_prof_0.nc
+2025-09-24 02:31:03,332 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250628_prof_1.nc
+2025-09-24 02:31:03,335 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250702_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250702_prof_0.nc
+2025-09-24 02:31:17,909 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250628_prof_0.nc
+2025-09-24 02:31:17,911 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250702_prof_1.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250702_prof_1.nc
+2025-09-24 02:31:18,368 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250701_prof_0.nc
+2025-09-24 02:31:18,370 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250703_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250703_prof_0.nc
+2025-09-24 02:31:23,292 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250630_prof_0.nc
+2025-09-24 02:31:23,294 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250704_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250704_prof_0.nc
+2025-09-24 02:31:27,764 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250704_prof_0.nc
+2025-09-24 02:31:27,766 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250706_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250706_prof_0.nc
+2025-09-24 02:31:30,381 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250703_prof_0.nc
+2025-09-24 02:31:30,383 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250707_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250707_prof_0.nc
+2025-09-24 02:31:35,009 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250707_prof_0.nc
+2025-09-24 02:31:35,010 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250708_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250708_prof_0.nc
+2025-09-24 02:31:35,501 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250706_prof_0.nc
+2025-09-24 02:31:35,503 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250709_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250709_prof_0.nc
+2025-09-24 02:31:37,183 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250702_prof_1.nc
+2025-09-24 02:31:37,186 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250709_prof_1.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250709_prof_1.nc
+2025-09-24 02:31:48,588 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250708_prof_0.nc
+2025-09-24 02:31:48,591 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250709_prof_2.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250709_prof_2.nc
+2025-09-24 02:31:51,899 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250709_prof_1.nc
+2025-09-24 02:31:51,902 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250710_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250710_prof_0.nc
+2025-09-24 02:32:05,245 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250710_prof_0.nc
+2025-09-24 02:32:05,247 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250711_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250711_prof_0.nc
+2025-09-24 02:34:01,669 INFO No URLs provided; using default GDAC/DAC seeds and recursive crawl.
+2025-09-24 02:34:01,670 INFO Processing 2 seed URL(s)
+2025-09-24 02:34:11,489 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250624_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250624_prof_0.nc
+2025-09-24 02:34:11,490 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250625_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250625_prof_0.nc
+2025-09-24 02:34:11,491 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250626_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250626_prof_0.nc
+2025-09-24 02:34:11,492 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250627_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250627_prof_0.nc
+2025-09-24 02:34:11,494 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250627_prof_1.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250627_prof_1.nc
+2025-09-24 02:34:30,848 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250626_prof_0.nc
+2025-09-24 02:34:40,407 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250625_prof_0.nc
+2025-09-24 02:34:59,834 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250627_prof_1.nc
+2025-09-24 02:35:28,275 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250627_prof_0.nc
+2025-09-24 02:37:52,364 INFO No URLs provided; using default GDAC/DAC seeds and recursive crawl.
+2025-09-24 02:37:52,364 INFO Processing 2 seed URL(s)
+2025-09-24 02:38:02,113 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250624_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250624_prof_0.nc
+2025-09-24 02:38:02,114 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250625_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250625_prof_0.nc
+2025-09-24 02:38:02,116 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250626_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250626_prof_0.nc
+2025-09-24 02:38:02,119 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250627_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250627_prof_0.nc
+2025-09-24 02:38:02,121 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250627_prof_1.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250627_prof_1.nc
+2025-09-24 02:38:26,345 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250626_prof_0.nc
+2025-09-24 02:38:35,880 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250624_prof_0.nc
+2025-09-24 02:38:37,435 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250625_prof_0.nc
+2025-09-24 02:38:47,332 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250627_prof_1.nc
+2025-09-24 02:41:56,061 INFO No URLs provided; using default GDAC/DAC seeds and recursive crawl.
+2025-09-24 02:42:05,901 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250624_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250624_prof_0.nc
+2025-09-24 02:42:05,902 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250625_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250625_prof_0.nc
+2025-09-24 02:42:05,902 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250626_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250626_prof_0.nc
+2025-09-24 02:42:05,905 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250627_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250627_prof_0.nc
+2025-09-24 02:42:05,906 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250627_prof_1.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250627_prof_1.nc
+2025-09-24 02:42:35,041 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250625_prof_0.nc
+2025-09-24 02:42:36,144 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250626_prof_0.nc
+2025-09-24 02:42:40,949 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250627_prof_1.nc
+2025-09-24 02:42:44,873 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250627_prof_0.nc
+2025-09-24 02:43:48,865 INFO No URLs provided; using default GDAC/DAC seeds and recursive crawl.
+2025-09-24 02:43:58,483 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250624_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250624_prof_0.nc
+2025-09-24 02:43:58,484 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250625_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250625_prof_0.nc
+2025-09-24 02:43:58,486 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250626_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250626_prof_0.nc
+2025-09-24 02:43:58,488 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250627_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250627_prof_0.nc
+2025-09-24 02:43:58,489 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250627_prof_1.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250627_prof_1.nc
+2025-09-24 02:44:10,056 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250625_prof_0.nc
+2025-09-24 02:44:32,588 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250627_prof_1.nc
+2025-09-24 02:47:09,749 INFO No URLs provided; using default GDAC/DAC seeds and recursive crawl.
+2025-09-24 02:47:20,233 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250624_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250624_prof_0.nc
+2025-09-24 02:47:20,234 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250625_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250625_prof_0.nc
+2025-09-24 02:47:20,235 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250626_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250626_prof_0.nc
+2025-09-24 02:47:20,238 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250627_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250627_prof_0.nc
+2025-09-24 02:47:20,239 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250627_prof_1.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250627_prof_1.nc
+2025-09-24 02:47:39,006 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250625_prof_0.nc
+2025-09-24 02:47:39,008 INFO Completed 1/5 downloads
+2025-09-24 02:48:02,227 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250627_prof_0.nc
+2025-09-24 02:48:02,229 INFO Completed 2/5 downloads
+2025-09-24 02:49:28,492 INFO No URLs provided; using default GDAC/DAC seeds and recursive crawl.
+2025-09-24 02:49:39,038 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250624_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250624_prof_0.nc
+2025-09-24 02:49:39,039 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250625_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250625_prof_0.nc
+2025-09-24 02:51:44,178 INFO No URLs provided; using default GDAC/DAC seeds and recursive crawl.
+2025-09-24 02:51:54,931 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250624_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250624_prof_0.nc
+2025-09-24 02:52:54,371 INFO No URLs provided; using default GDAC/DAC seeds and recursive crawl.
+2025-09-24 02:53:04,277 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250624_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250624_prof_0.nc
+2025-09-24 02:54:28,529 INFO No URLs provided; using default GDAC/DAC seeds and recursive crawl.
+2025-09-24 02:54:38,237 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250624_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250624_prof_0.nc
+2025-09-24 02:55:23,988 INFO Saved: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250624_prof_0.nc
+2025-09-24 02:55:23,990 INFO Completed 1/1 downloads
+2025-09-24 02:55:23,991 INFO Successfully downloaded 1 file(s) (cap=1). Exiting.
+2025-09-24 02:55:31,900 INFO No URLs provided; using default GDAC/DAC seeds and recursive crawl.
+2025-09-24 02:55:41,917 INFO Downloading https://data-argo.ifremer.fr/latest_data/D20250624_prof_0.nc -> C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF\D20250624_prof_0.nc

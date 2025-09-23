@@ -1,0 +1,11 @@
+<--DONE-->
+##--run this to start sheduler--## 
+python backend/app.py --mode scheduler --interval-minutes 30
+
+##--run this to download netcdf files from web--##(takes time depending on size)
+python datasetconversion/scripts/fast_download.py
+
+
+<--TO DO-->
+1.create a skeleton of the chatbot
+2.create frontend.
