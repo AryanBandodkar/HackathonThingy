@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { MapContainer, TileLayer, Marker, Popup, Tooltip as LeafletTooltip } from 'react-leaflet';
-import { ScatterChart, Scatter, XAxis, YAxis, ZAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
+import { ScatterChart, Scatter, XAxis, YAxis, ZAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Brush } from 'recharts';
 import 'leaflet/dist/leaflet.css';
 
 // Fix for default markers in react-leaflet
@@ -16,7 +16,7 @@ L.Icon.Default.mergeOptions({
 const API_BASE_URL = 'http://localhost:5000';
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 8000,
+  timeout: 120000, // increase timeout to handle large result sets
   headers: { 'Content-Type': 'application/json' }
 });
 
@@ -39,6 +39,17 @@ function App() {
   const [apiHealthy, setApiHealthy] = useState(true);
   const [activeTab, setActiveTab] = useState('map');
 
+  // Always use the latest bot message data for visualizations to match text
+  const getLatestBotData = () => {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      const m = messages[i];
+      if (m.type === 'bot' && Array.isArray(m.data) && m.data.length > 0) {
+        return m.data;
+      }
+    }
+    return currentData;
+  };
+
   // Small inline map for individual bot responses
   const InlineMap = ({ data }) => {
     if (!data || data.length === 0) return null;
@@ -60,7 +71,7 @@ function App() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
-          {valid.slice(0, 100).map((item, idx) => (
+          {valid.map((item, idx) => (
             <Marker key={idx} position={[item.LATITUDE, item.LONGITUDE]}>
               <LeafletTooltip direction="top" offset={[0, -10]} opacity={0.95} permanent={false}>
                 <div>
@@ -140,12 +151,11 @@ function App() {
 
       if (response.data.success) {
         const normalized = normalizeData(response.data.data || []);
-        const displayedSubset = normalized.slice(0, 5); // match text summary (first 5)
         // Add bot response
         setMessages([...newMessages, { 
           type: 'bot', 
           content: response.data.response,
-          data: displayedSubset
+          data: normalized
         }]);
         
         // Update current data for visualization
@@ -187,11 +197,12 @@ function App() {
   ];
 
   const renderMap = () => {
-    if (!currentData || currentData.length === 0) {
+    const vizData = getLatestBotData();
+    if (!vizData || vizData.length === 0) {
       return <div className="loading">No location data available for mapping.</div>;
     }
 
-    const validData = currentData.filter(item => 
+    const validData = vizData.filter(item => 
       item.LATITUDE && item.LONGITUDE && 
       !isNaN(item.LATITUDE) && !isNaN(item.LONGITUDE)
     );
@@ -205,6 +216,7 @@ function App() {
 
     return (
       <MapContainer
+        key={`${centerLat.toFixed(3)}_${centerLon.toFixed(3)}_${validData.length}`}
         center={[centerLat, centerLon]}
         zoom={6}
         className="map-container"
@@ -240,15 +252,22 @@ function App() {
   };
 
   const renderTemperatureChart = () => {
-    if (!currentData || currentData.length === 0) {
+    const vizData = getLatestBotData();
+    if (!vizData || vizData.length === 0) {
       return <div className="loading">No temperature data available for plotting.</div>;
     }
 
-    const chartData = currentData
-      .filter(item => item.LATITUDE && item.LONGITUDE && item.TEMP)
+    const jitter = (v, amount = 0.05) => {
+      if (v == null || isNaN(v)) return v;
+      const rand = (Math.random() - 0.5) * 2 * amount;
+      return v + rand;
+    };
+
+    const chartData = vizData
+      .filter(item => item.LATITUDE != null && item.LONGITUDE != null && item.TEMP != null)
       .map(item => ({
-        x: item.LONGITUDE,
-        y: item.LATITUDE,
+        x: jitter(item.LONGITUDE),
+        y: jitter(item.LATITUDE),
         temp: item.TEMP,
         salinity: item.PSAL || 0,
         pressure: item.PRES || 0
@@ -258,23 +277,43 @@ function App() {
       return <div className="loading">No valid temperature data available.</div>;
     }
 
+    const valuesX = chartData.map(d => d.x).filter(v => isFinite(v));
+    const valuesY = chartData.map(d => d.y).filter(v => isFinite(v));
+    const quantile = (arr, q) => {
+      if (!arr.length) return 0;
+      const a = [...arr].sort((a,b)=>a-b);
+      const pos = (a.length - 1) * q;
+      const base = Math.floor(pos);
+      const rest = pos - base;
+      return a[base] + ((a[base + 1] ?? a[base]) - a[base]) * rest;
+    };
+    const qx1 = quantile(valuesX, 0.05), qx3 = quantile(valuesX, 0.95);
+    const qy1 = quantile(valuesY, 0.05), qy3 = quantile(valuesY, 0.95);
+    const padX = (qx3 - qx1) * 0.1 || 1;
+    const padY = (qy3 - qy1) * 0.1 || 1;
+    const domainX = [qx1 - padX, qx3 + padX];
+    const domainY = [qy1 - padY, qy3 + padY];
+
     return (
-      <ResponsiveContainer width="100%" height={300}>
-        <ScatterChart margin={{ top: 10, right: 10, bottom: 10, left: 10 }}>
+      <ResponsiveContainer width="100%" height={340}>
+        <ScatterChart margin={{ top: 10, right: 20, bottom: 30, left: 50 }}>
           <CartesianGrid />
           <XAxis 
             type="number" 
             dataKey="x" 
             name="Longitude"
             label={{ value: 'Longitude', position: 'insideBottom', offset: -5 }}
+            domain={domainX}
+            tickCount={8}
           />
           <YAxis 
             type="number" 
             dataKey="y" 
             name="Latitude"
             label={{ value: 'Latitude', angle: -90, position: 'insideLeft' }}
+            domain={domainY}
+            tickCount={7}
           />
-          <ZAxis type="number" dataKey="temp" range={[60, 200]} name="Temperature" unit="°C" />
           <RechartsTooltip 
             formatter={(value, name) => {
               if (name === 'temp') return [`${value.toFixed(2)}°C`, 'Temperature'];
@@ -289,22 +328,30 @@ function App() {
               return '';
             }}
           />
-          <Scatter data={chartData} name="Temperature" fill="#ff6b6b" fillOpacity={0.8} />
+          <Scatter data={chartData} name="Temperature" fill="#ff6b6b" fillOpacity={0.7} />
+          <Brush dataKey="x" height={18} stroke="#22ff88" travellerWidth={8} />
         </ScatterChart>
       </ResponsiveContainer>
     );
   };
 
   const renderSalinityChart = () => {
-    if (!currentData || currentData.length === 0) {
+    const vizData = getLatestBotData();
+    if (!vizData || vizData.length === 0) {
       return <div className="loading">No salinity data available for plotting.</div>;
     }
 
-    const chartData = currentData
-      .filter(item => item.LATITUDE && item.LONGITUDE && item.PSAL)
+    const jitter = (v, amount = 0.05) => {
+      if (v == null || isNaN(v)) return v;
+      const rand = (Math.random() - 0.5) * 2 * amount;
+      return v + rand;
+    };
+
+    const chartData = vizData
+      .filter(item => item.LATITUDE != null && item.LONGITUDE != null && item.PSAL != null)
       .map(item => ({
-        x: item.LONGITUDE,
-        y: item.LATITUDE,
+        x: jitter(item.LONGITUDE),
+        y: jitter(item.LATITUDE),
         temp: item.TEMP || 0,
         salinity: item.PSAL,
         pressure: item.PRES || 0
@@ -314,23 +361,43 @@ function App() {
       return <div className="loading">No valid salinity data available.</div>;
     }
 
+    const valuesX = chartData.map(d => d.x).filter(v => isFinite(v));
+    const valuesY = chartData.map(d => d.y).filter(v => isFinite(v));
+    const quantile = (arr, q) => {
+      if (!arr.length) return 0;
+      const a = [...arr].sort((a,b)=>a-b);
+      const pos = (a.length - 1) * q;
+      const base = Math.floor(pos);
+      const rest = pos - base;
+      return a[base] + ((a[base + 1] ?? a[base]) - a[base]) * rest;
+    };
+    const qx1 = quantile(valuesX, 0.05), qx3 = quantile(valuesX, 0.95);
+    const qy1 = quantile(valuesY, 0.05), qy3 = quantile(valuesY, 0.95);
+    const padX = (qx3 - qx1) * 0.1 || 1;
+    const padY = (qy3 - qy1) * 0.1 || 1;
+    const domainX = [qx1 - padX, qx3 + padX];
+    const domainY = [qy1 - padY, qy3 + padY];
+
     return (
-      <ResponsiveContainer width="100%" height={300}>
-        <ScatterChart margin={{ top: 10, right: 10, bottom: 10, left: 10 }}>
+      <ResponsiveContainer width="100%" height={340}>
+        <ScatterChart margin={{ top: 10, right: 20, bottom: 30, left: 50 }}>
           <CartesianGrid />
           <XAxis 
             type="number" 
             dataKey="x" 
             name="Longitude"
             label={{ value: 'Longitude', position: 'insideBottom', offset: -5 }}
+            domain={domainX}
+            tickCount={8}
           />
           <YAxis 
             type="number" 
             dataKey="y" 
             name="Latitude"
             label={{ value: 'Latitude', angle: -90, position: 'insideLeft' }}
+            domain={domainY}
+            tickCount={7}
           />
-          <ZAxis type="number" dataKey="salinity" range={[60, 200]} name="Salinity" unit=" PSU" />
           <RechartsTooltip 
             formatter={(value, name) => {
               if (name === 'temp') return [`${value.toFixed(2)}°C`, 'Temperature'];
@@ -345,7 +412,8 @@ function App() {
               return '';
             }}
           />
-          <Scatter data={chartData} name="Salinity" fill="#4ecdc4" fillOpacity={0.85} />
+          <Scatter data={chartData} name="Salinity" fill="#4ecdc4" fillOpacity={0.7} />
+          <Brush dataKey="x" height={18} stroke="#22ff88" travellerWidth={8} />
         </ScatterChart>
       </ResponsiveContainer>
     );
@@ -444,7 +512,7 @@ function App() {
         </div>
       </div>
 
-      {currentData && currentData.length > 0 && (
+      {getLatestBotData() && getLatestBotData().length > 0 && (
         <div className="visualization-tabs">
           <div className="tab-buttons">
             <button

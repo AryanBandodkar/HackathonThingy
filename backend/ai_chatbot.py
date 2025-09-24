@@ -32,7 +32,8 @@ class AIChatbot:
             'profile_query': ['profile', 'profiles', 'data points'],
             'source_query': ['source', 'file', 'origin', 'dataset'],
             'range_query': ['range', 'between', 'from', 'to', 'min', 'max', 'average'],
-            'visualization': ['map', 'plot', 'chart', 'graph', 'visualize', 'show']
+            'visualization': ['map', 'plot', 'chart', 'graph', 'visualize', 'show'],
+            'count_query': ['how many', 'number of', 'count of']
         }
         
         detected_intents = []
@@ -42,6 +43,10 @@ class AIChatbot:
         
         # Extract numerical values
         numbers = re.findall(r'-?\d+\.?\d*', user_input)
+
+        # Flags for proximity queries like "near latitude 40" or "near lon -70"
+        near_latitude = 'near' in user_input_lower and 'latitude' in user_input_lower
+        near_longitude = 'near' in user_input_lower and 'longitude' in user_input_lower
         
         # Extract comparison operators
         operators = []
@@ -51,12 +56,20 @@ class AIChatbot:
             operators.append('<')
         if '=' in user_input or 'equal' in user_input_lower:
             operators.append('=')
+
+        # Qualifiers for high/low wording
+        is_high = 'high' in user_input_lower or 'highest' in user_input_lower or 'max' in user_input_lower
+        is_low = 'low' in user_input_lower or 'lowest' in user_input_lower or 'min' in user_input_lower
         
         return {
             'intents': detected_intents,
             'numbers': [float(n) for n in numbers if n],
             'operators': operators,
-            'original_input': user_input
+            'original_input': user_input,
+            'near_latitude': near_latitude,
+            'near_longitude': near_longitude,
+            'is_high': is_high,
+            'is_low': is_low
         }
     
     def generate_sql_query(self, intent_analysis: Dict[str, Any]) -> str:
@@ -105,7 +118,15 @@ class AIChatbot:
                 where_conditions.append("PRES IS NOT NULL")
         
         if 'location_query' in intents:
-            where_conditions.append("LATITUDE IS NOT NULL AND LONGITUDE IS NOT NULL")
+            # Handle proximity queries
+            if intent_analysis.get('near_latitude') and numbers:
+                lat = numbers[0]
+                where_conditions.append(f"LATITUDE IS NOT NULL AND ABS(LATITUDE - {lat}) <= 1.0")
+            elif intent_analysis.get('near_longitude') and numbers:
+                lon = numbers[0]
+                where_conditions.append(f"LONGITUDE IS NOT NULL AND ABS(LONGITUDE - {lon}) <= 1.0")
+            else:
+                where_conditions.append("LATITUDE IS NOT NULL AND LONGITUDE IS NOT NULL")
         
         if 'source_query' in intents:
             where_conditions.append("SOURCE_FILE IS NOT NULL")
@@ -114,17 +135,17 @@ class AIChatbot:
         if where_conditions:
             base_query += " WHERE " + " AND ".join(where_conditions)
         
-        # Add ORDER BY for better results
+        # Add ORDER BY for better results and respect high/low wording
         if 'temperature_query' in intents:
-            base_query += " ORDER BY TEMP DESC"
+            base_query += " ORDER BY TEMP " + ("DESC" if intent_analysis.get('is_high') or not intent_analysis.get('is_low') else "ASC")
         elif 'salinity_query' in intents:
-            base_query += " ORDER BY PSAL DESC"
+            base_query += " ORDER BY PSAL " + ("DESC" if intent_analysis.get('is_high') or not intent_analysis.get('is_low') else "ASC")
         elif 'pressure_query' in intents:
-            base_query += " ORDER BY PRES ASC"
-        
-        # Limit results for better performance
-        base_query += " LIMIT 100"
-        
+            base_query += " ORDER BY PRES " + ("DESC" if intent_analysis.get('is_high') or not intent_analysis.get('is_low') else "ASC")
+
+        # Cap result set to reduce response time and payload size
+        base_query += " LIMIT 1000"
+
         return base_query
     
     def generate_summary_query(self, intent_analysis: Dict[str, Any]) -> str:
@@ -147,7 +168,31 @@ class AIChatbot:
                 AVG(PRES) as avg_pressure
             FROM profiles
             """
+
+        # Explicit count requests
+        if 'count_query' in intents:
+            return "SELECT COUNT(*) as total_profiles FROM profiles"
         
+        if 'range_query' in intents and 'salinity_query' in intents:
+            # Salinity range specifically
+            return """
+            SELECT 
+                MIN(PSAL) as min_salinity,
+                MAX(PSAL) as max_salinity,
+                AVG(PSAL) as avg_salinity
+            FROM profiles
+            """
+
+        if 'range_query' in intents and 'temperature_query' in intents:
+            # Temperature range specifically
+            return """
+            SELECT 
+                MIN(TEMP) as min_temperature,
+                MAX(TEMP) as max_temperature,
+                AVG(TEMP) as avg_temperature
+            FROM profiles
+            """
+
         if 'range_query' in intents:
             return """
             SELECT 
@@ -177,7 +222,11 @@ class AIChatbot:
             })
             
             # Determine query type
-            if 'data_summary' in intent_analysis['intents'] or 'range_query' in intent_analysis['intents']:
+            if (
+                'data_summary' in intent_analysis['intents']
+                or 'range_query' in intent_analysis['intents']
+                or 'count_query' in intent_analysis['intents']
+            ):
                 query = self.generate_summary_query(intent_analysis)
                 query_type = 'summary'
             else:
@@ -213,6 +262,15 @@ class AIChatbot:
         
         data = result['data']
         intents = intent_analysis['intents']
+
+        # Safe number formatter to avoid NoneType format errors
+        def fmt_num(value, digits: int = 2):
+            try:
+                if value is None:
+                    return "N/A"
+                return f"{float(value):.{digits}f}"
+            except Exception:
+                return "N/A"
         
         if query_type == 'summary':
             if data and len(data) > 0:
@@ -226,28 +284,28 @@ class AIChatbot:
                     response += f"📍 **Unique Locations**: {row['unique_locations']}\n"
                 
                 if 'min_temperature' in row and 'max_temperature' in row:
-                    response += f"🌡️ **Temperature Range**: {row['min_temperature']:.2f}°C to {row['max_temperature']:.2f}°C\n"
+                    response += f"🌡️ **Temperature Range**: {fmt_num(row.get('min_temperature'))}°C to {fmt_num(row.get('max_temperature'))}°C\n"
                 
                 if 'avg_temperature' in row:
-                    response += f"🌡️ **Average Temperature**: {row['avg_temperature']:.2f}°C\n"
+                    response += f"🌡️ **Average Temperature**: {fmt_num(row.get('avg_temperature'))}°C\n"
                 
                 if 'min_salinity' in row and 'max_salinity' in row:
-                    response += f"🧂 **Salinity Range**: {row['min_salinity']:.2f} to {row['max_salinity']:.2f} PSU\n"
+                    response += f"🧂 **Salinity Range**: {fmt_num(row.get('min_salinity'))} to {fmt_num(row.get('max_salinity'))} PSU\n"
                 
                 if 'avg_salinity' in row:
-                    response += f"🧂 **Average Salinity**: {row['avg_salinity']:.2f} PSU\n"
+                    response += f"🧂 **Average Salinity**: {fmt_num(row.get('avg_salinity'))} PSU\n"
                 
                 if 'min_pressure' in row and 'max_pressure' in row:
-                    response += f"💧 **Pressure Range**: {row['min_pressure']:.2f} to {row['max_pressure']:.2f} dbar\n"
+                    response += f"💧 **Pressure Range**: {fmt_num(row.get('min_pressure'))} to {fmt_num(row.get('max_pressure'))} dbar\n"
                 
                 if 'avg_pressure' in row:
-                    response += f"💧 **Average Pressure**: {row['avg_pressure']:.2f} dbar\n"
+                    response += f"💧 **Average Pressure**: {fmt_num(row.get('avg_pressure'))} dbar\n"
                 
                 if 'min_latitude' in row and 'max_latitude' in row:
-                    response += f"🗺️ **Latitude Range**: {row['min_latitude']:.2f}° to {row['max_latitude']:.2f}°\n"
+                    response += f"🗺️ **Latitude Range**: {fmt_num(row.get('min_latitude'))}° to {fmt_num(row.get('max_latitude'))}°\n"
                 
                 if 'min_longitude' in row and 'max_longitude' in row:
-                    response += f"🗺️ **Longitude Range**: {row['min_longitude']:.2f}° to {row['max_longitude']:.2f}°\n"
+                    response += f"🗺️ **Longitude Range**: {fmt_num(row.get('min_longitude'))}° to {fmt_num(row.get('max_longitude'))}°\n"
                 
                 return response
             else:
@@ -259,29 +317,28 @@ class AIChatbot:
             
             response = f"Found {len(data)} data points matching your query:\n\n"
             
-            # Show first few results
-            for i, row in enumerate(data[:5]):  # Show first 5 results
+            # Show all results in text (may be long)
+            for i, row in enumerate(data):
                 response += f"**Profile {i+1}:**\n"
                 
                 if 'LATITUDE' in row and 'LONGITUDE' in row:
-                    response += f"  📍 Location: {row['LATITUDE']:.3f}°N, {row['LONGITUDE']:.3f}°W\n"
+                    response += f"  📍 Location: {fmt_num(row.get('LATITUDE'), 3)}°N, {fmt_num(row.get('LONGITUDE'), 3)}°W\n"
                 
                 if 'TEMP' in row:
-                    response += f"  🌡️ Temperature: {row['TEMP']:.2f}°C\n"
+                    response += f"  🌡️ Temperature: {fmt_num(row.get('TEMP'))}°C\n"
                 
                 if 'PSAL' in row:
-                    response += f"  🧂 Salinity: {row['PSAL']:.2f} PSU\n"
+                    response += f"  🧂 Salinity: {fmt_num(row.get('PSAL'))} PSU\n"
                 
                 if 'PRES' in row:
-                    response += f"  💧 Pressure: {row['PRES']:.2f} dbar\n"
+                    response += f"  💧 Pressure: {fmt_num(row.get('PRES'))} dbar\n"
                 
                 if 'SOURCE_FILE' in row:
                     response += f"  📁 Source: {row['SOURCE_FILE']}\n"
                 
                 response += "\n"
             
-            if len(data) > 5:
-                response += f"... and {len(data) - 5} more results.\n"
+            # No truncation; all results listed
             
             return response
     

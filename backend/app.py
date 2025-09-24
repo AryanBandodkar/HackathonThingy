@@ -20,7 +20,7 @@ def print_db_overview():
         count = cursor.fetchone()[0]
         print(f"[{datetime.now().isoformat()}] Total profiles in database: {count}")
 
-        cursor.execute("SELECT * FROM profiles LIMIT 5")
+        cursor.execute("SELECT * FROM profiles")
         rows = cursor.fetchall()
         for row in rows:
             print(row)

@@ -4,8 +4,17 @@ from typing import List, Dict, Any, Optional
 import logging
 
 class DatabaseManager:
-    def __init__(self, db_path: str = "argo_profiles.db"):
-        self.db_path = Path(db_path)
+    def __init__(self, db_path: str | None = None):
+        # Resolve DB path to the backend folder by default
+        if db_path is None:
+            self.db_path = Path(__file__).resolve().parent / 'argo_profiles.db'
+        else:
+            candidate = Path(db_path)
+            if candidate.is_absolute():
+                self.db_path = candidate
+            else:
+                # Treat relative paths as relative to this file's directory (backend)
+                self.db_path = (Path(__file__).resolve().parent / candidate).resolve()
         self.setup_logging()
         
     def setup_logging(self):
@@ -21,7 +30,29 @@ class DatabaseManager:
         conn = sqlite3.connect(self.db_path)
         conn.execute("PRAGMA journal_mode=WAL")
         conn.execute("PRAGMA synchronous=NORMAL")
+        conn.execute("PRAGMA temp_store=MEMORY")
+        try:
+            conn.execute("PRAGMA mmap_size=30000000000")
+        except Exception:
+            pass
         return conn
+
+    def ensure_indexes(self) -> None:
+        """Create indexes to speed up common queries"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        try:
+            cursor.execute("CREATE INDEX IF NOT EXISTS idx_profiles_temp ON profiles(TEMP)")
+            cursor.execute("CREATE INDEX IF NOT EXISTS idx_profiles_psal ON profiles(PSAL)")
+            cursor.execute("CREATE INDEX IF NOT EXISTS idx_profiles_pres ON profiles(PRES)")
+            cursor.execute("CREATE INDEX IF NOT EXISTS idx_profiles_lat_lon ON profiles(LATITUDE, LONGITUDE)")
+            cursor.execute("CREATE INDEX IF NOT EXISTS idx_profiles_source ON profiles(SOURCE_FILE)")
+            conn.commit()
+            cursor.execute("ANALYZE")
+        except Exception as e:
+            self.logger.warning(f"Index creation failed: {e}")
+        finally:
+            conn.close()
     
     def create_sample_data(self):
         """Create sample data for testing if database is empty"""
@@ -137,7 +168,7 @@ class DatabaseManager:
         """Get sample queries for the AI to understand the data structure"""
         return [
             "SELECT COUNT(*) as total_profiles FROM profiles",
-            "SELECT * FROM profiles LIMIT 5",
+            "SELECT * FROM profiles",
             "SELECT LATITUDE, LONGITUDE, TEMP, PSAL FROM profiles WHERE TEMP > 15",
             "SELECT SOURCE_FILE, COUNT(*) as profile_count FROM profiles GROUP BY SOURCE_FILE",
             "SELECT AVG(TEMP) as avg_temp, AVG(PSAL) as avg_salinity FROM profiles",

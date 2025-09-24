@@ -15,9 +15,15 @@ backend_path = Path(__file__).parent / 'backend'
 sys.path.append(str(backend_path))
 
 from ai_chatbot import AIChatbot
+from database_manager import DatabaseManager
 
 class FloatChatAPIHandler(BaseHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
+        # Ensure DB indexes once per process
+        try:
+            DatabaseManager().ensure_indexes()
+        except Exception:
+            pass
         self.chatbot = AIChatbot()
         super().__init__(*args, **kwargs)
     
