@@ -8516,3 +8516,10 @@ All CSV files inserted into C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\Hack
 2025-09-24 04:02:36,181 INFO Processing new source files: {'D20250624_prof_0.nc'}
 2025-09-24 04:02:36,258 INFO Processing 694272 new rows
 2025-09-24 04:02:39,597 INFO Database now contains 700836 total rows
+2025-09-24 08:12:54,438 INFO Processing consolidated CSV: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\processedCSV\argo_profiles_consolidated.csv
+2025-09-24 08:12:56,028 INFO Loaded 697666 rows from CSV
+2025-09-24 08:12:58,669 INFO No new data to process - all source files already in database
+All CSV files inserted into C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\backend\argo_profiles.db
+2025-09-24 08:12:54,438 INFO Processing consolidated CSV: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\processedCSV\argo_profiles_consolidated.csv
+2025-09-24 08:12:56,028 INFO Loaded 697666 rows from CSV
+2025-09-24 08:12:58,669 INFO No new data to process - all source files already in database

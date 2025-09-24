@@ -537,3 +537,5 @@ Key variables (shapes and first 5 samples):
     samples: [-66.966, -66.695, -66.496, -66.481, -66.309]
   * LONGITUDE: shape=(678,)
     samples: [175.565, 175.364, 174.856, 174.508, 174.485]
+Looking for .nc files in: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF
+No NetCDF files found.

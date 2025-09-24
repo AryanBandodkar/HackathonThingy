@@ -2298,3 +2298,13 @@ Appended to C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data
 2025-09-24 04:02:10,039 INFO Processing file: D20250624_prof_0.nc
 2025-09-24 04:02:10,044 INFO   Profiles detected: 678
 2025-09-24 04:02:31,510 INFO All profiles consolidated into: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\processedCSV\argo_profiles_consolidated.csv
+2025-09-24 08:12:48,424 INFO Looking for NetCDF files in: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF
+2025-09-24 08:12:48,424 INFO Found 0 files
+2025-09-24 08:12:50,050 INFO Found 3 already processed files
+2025-09-24 08:12:50,050 INFO Processing 0 new files out of 0 total
+2025-09-24 08:12:50,050 INFO All profiles consolidated into: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\processedCSV\argo_profiles_consolidated.csv
+2025-09-24 08:12:48,424 INFO Looking for NetCDF files in: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF
+2025-09-24 08:12:48,424 INFO Found 0 files
+2025-09-24 08:12:50,050 INFO Found 3 already processed files
+2025-09-24 08:12:50,050 INFO Processing 0 new files out of 0 total
+2025-09-24 08:12:50,050 INFO All profiles consolidated into: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\processedCSV\argo_profiles_consolidated.csv

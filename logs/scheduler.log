@@ -7240,3 +7240,31 @@ Appended to C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data
 2025-09-24 04:04:25,486 INFO Stopping scheduler...
 2025-09-24 04:04:25,488 INFO Scheduler has been shut down
 2025-09-24 04:04:25,490 INFO Scheduler stopped.
+2025-09-24 08:12:40,360 INFO Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-09-24 08:12:40,389 INFO Added job "fetch_and_update_job" to job store "default"
+2025-09-24 08:12:40,389 INFO Scheduler started
+2025-09-24 08:12:40,392 INFO Starting scheduled fetch & update job...
+2025-09-24 08:12:40,393 INFO Inspecting NetCDF files: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\datasetconversion\scripts\inspectNETCDF.py
+2025-09-24 08:12:43,158 INFO Looking for .nc files in: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF
+No NetCDF files found.
+
+2025-09-24 08:12:43,160 INFO Running ETL: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\datasetconversion\scripts\etl.py
+2025-09-24 08:12:50,237 WARNING 2025-09-24 08:12:48,424 INFO Looking for NetCDF files in: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF
+2025-09-24 08:12:48,424 INFO Found 0 files
+2025-09-24 08:12:50,050 INFO Found 3 already processed files
+2025-09-24 08:12:50,050 INFO Processing 0 new files out of 0 total
+2025-09-24 08:12:50,050 INFO All profiles consolidated into: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\processedCSV\argo_profiles_consolidated.csv
+
+2025-09-24 08:12:52,240 INFO Loading CSVs into DB: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\datasetconversion\scripts\db_conversion.py
+2025-09-24 08:12:58,931 INFO All CSV files inserted into C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\backend\argo_profiles.db
+
+2025-09-24 08:12:58,934 WARNING 2025-09-24 08:12:54,438 INFO Processing consolidated CSV: C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\processedCSV\argo_profiles_consolidated.csv
+2025-09-24 08:12:56,028 INFO Loaded 697666 rows from CSV
+2025-09-24 08:12:58,669 INFO No new data to process - all source files already in database
+
+2025-09-24 08:12:58,937 INFO Deleted 0 raw NetCDF file(s) from C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\data\rawNETCDF
+2025-09-24 08:12:58,938 INFO Job finished successfully.
+2025-09-24 08:12:58,938 INFO Scheduler started with interval=30 minutes. Press Ctrl+C to stop.
+2025-09-24 08:14:35,447 INFO Stopping scheduler...
+2025-09-24 08:14:35,448 INFO Scheduler has been shut down
+2025-09-24 08:14:35,449 INFO Scheduler stopped.
