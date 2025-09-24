@@ -1,0 +1,313 @@
+import json
+import re
+from typing import Dict, List, Any, Optional
+from database_manager import DatabaseManager
+import logging
+
+class AIChatbot:
+    def __init__(self, db_path: str = "argo_profiles.db"):
+        self.db_manager = DatabaseManager(db_path)
+        self.setup_logging()
+        self.conversation_history = []
+        
+    def setup_logging(self):
+        """Setup logging for the chatbot"""
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(levelname)s - %(message)s'
+        )
+        self.logger = logging.getLogger(__name__)
+    
+    def analyze_user_intent(self, user_input: str) -> Dict[str, Any]:
+        """Analyze user input to determine intent and extract parameters"""
+        user_input_lower = user_input.lower()
+        
+        # Define intent patterns
+        intents = {
+            'data_summary': ['summary', 'overview', 'statistics', 'stats', 'total', 'count'],
+            'temperature_query': ['temperature', 'temp', 'warm', 'cold', 'hot'],
+            'salinity_query': ['salinity', 'salt', 'psal'],
+            'location_query': ['location', 'latitude', 'longitude', 'coordinates', 'where', 'position'],
+            'pressure_query': ['pressure', 'pres', 'depth'],
+            'profile_query': ['profile', 'profiles', 'data points'],
+            'source_query': ['source', 'file', 'origin', 'dataset'],
+            'range_query': ['range', 'between', 'from', 'to', 'min', 'max', 'average'],
+            'visualization': ['map', 'plot', 'chart', 'graph', 'visualize', 'show']
+        }
+        
+        detected_intents = []
+        for intent, keywords in intents.items():
+            if any(keyword in user_input_lower for keyword in keywords):
+                detected_intents.append(intent)
+        
+        # Extract numerical values
+        numbers = re.findall(r'-?\d+\.?\d*', user_input)
+        
+        # Extract comparison operators
+        operators = []
+        if '>' in user_input or 'greater' in user_input_lower or 'above' in user_input_lower:
+            operators.append('>')
+        if '<' in user_input or 'less' in user_input_lower or 'below' in user_input_lower:
+            operators.append('<')
+        if '=' in user_input or 'equal' in user_input_lower:
+            operators.append('=')
+        
+        return {
+            'intents': detected_intents,
+            'numbers': [float(n) for n in numbers if n],
+            'operators': operators,
+            'original_input': user_input
+        }
+    
+    def generate_sql_query(self, intent_analysis: Dict[str, Any]) -> str:
+        """Generate SQL query based on intent analysis"""
+        intents = intent_analysis['intents']
+        numbers = intent_analysis['numbers']
+        operators = intent_analysis['operators']
+        
+        # Base query
+        base_query = "SELECT * FROM profiles"
+        where_conditions = []
+        
+        # Handle different intents
+        if 'temperature_query' in intents:
+            if numbers and operators:
+                if '>' in operators:
+                    where_conditions.append(f"TEMP > {numbers[0]}")
+                elif '<' in operators:
+                    where_conditions.append(f"TEMP < {numbers[0]}")
+                elif '=' in operators:
+                    where_conditions.append(f"TEMP = {numbers[0]}")
+            else:
+                # Default temperature query
+                where_conditions.append("TEMP IS NOT NULL")
+        
+        if 'salinity_query' in intents:
+            if numbers and operators:
+                if '>' in operators:
+                    where_conditions.append(f"PSAL > {numbers[0]}")
+                elif '<' in operators:
+                    where_conditions.append(f"PSAL < {numbers[0]}")
+                elif '=' in operators:
+                    where_conditions.append(f"PSAL = {numbers[0]}")
+            else:
+                where_conditions.append("PSAL IS NOT NULL")
+        
+        if 'pressure_query' in intents:
+            if numbers and operators:
+                if '>' in operators:
+                    where_conditions.append(f"PRES > {numbers[0]}")
+                elif '<' in operators:
+                    where_conditions.append(f"PRES < {numbers[0]}")
+                elif '=' in operators:
+                    where_conditions.append(f"PRES = {numbers[0]}")
+            else:
+                where_conditions.append("PRES IS NOT NULL")
+        
+        if 'location_query' in intents:
+            where_conditions.append("LATITUDE IS NOT NULL AND LONGITUDE IS NOT NULL")
+        
+        if 'source_query' in intents:
+            where_conditions.append("SOURCE_FILE IS NOT NULL")
+        
+        # Add WHERE clause if conditions exist
+        if where_conditions:
+            base_query += " WHERE " + " AND ".join(where_conditions)
+        
+        # Add ORDER BY for better results
+        if 'temperature_query' in intents:
+            base_query += " ORDER BY TEMP DESC"
+        elif 'salinity_query' in intents:
+            base_query += " ORDER BY PSAL DESC"
+        elif 'pressure_query' in intents:
+            base_query += " ORDER BY PRES ASC"
+        
+        # Limit results for better performance
+        base_query += " LIMIT 100"
+        
+        return base_query
+    
+    def generate_summary_query(self, intent_analysis: Dict[str, Any]) -> str:
+        """Generate summary/aggregation query"""
+        intents = intent_analysis['intents']
+        
+        if 'data_summary' in intents:
+            return """
+            SELECT 
+                COUNT(*) as total_profiles,
+                COUNT(DISTINCT LATITUDE || ',' || LONGITUDE) as unique_locations,
+                MIN(TEMP) as min_temperature,
+                MAX(TEMP) as max_temperature,
+                AVG(TEMP) as avg_temperature,
+                MIN(PSAL) as min_salinity,
+                MAX(PSAL) as max_salinity,
+                AVG(PSAL) as avg_salinity,
+                MIN(PRES) as min_pressure,
+                MAX(PRES) as max_pressure,
+                AVG(PRES) as avg_pressure
+            FROM profiles
+            """
+        
+        if 'range_query' in intents:
+            return """
+            SELECT 
+                MIN(LATITUDE) as min_latitude,
+                MAX(LATITUDE) as max_latitude,
+                MIN(LONGITUDE) as min_longitude,
+                MAX(LONGITUDE) as max_longitude,
+                MIN(TEMP) as min_temperature,
+                MAX(TEMP) as max_temperature,
+                MIN(PSAL) as min_salinity,
+                MAX(PSAL) as max_salinity
+            FROM profiles
+            """
+        
+        return "SELECT COUNT(*) as total_profiles FROM profiles"
+    
+    def process_user_input(self, user_input: str) -> Dict[str, Any]:
+        """Process user input and return response"""
+        try:
+            # Analyze user intent
+            intent_analysis = self.analyze_user_intent(user_input)
+            
+            # Store in conversation history
+            self.conversation_history.append({
+                'user': user_input,
+                'intent_analysis': intent_analysis
+            })
+            
+            # Determine query type
+            if 'data_summary' in intent_analysis['intents'] or 'range_query' in intent_analysis['intents']:
+                query = self.generate_summary_query(intent_analysis)
+                query_type = 'summary'
+            else:
+                query = self.generate_sql_query(intent_analysis)
+                query_type = 'data'
+            
+            # Execute query
+            result = self.db_manager.execute_query(query)
+            
+            # Generate response
+            response = self.generate_response(intent_analysis, result, query_type)
+            
+            return {
+                'success': True,
+                'response': response,
+                'query': query,
+                'data': result['data'],
+                'intent_analysis': intent_analysis
+            }
+            
+        except Exception as e:
+            self.logger.error(f"Error processing user input: {str(e)}")
+            return {
+                'success': False,
+                'error': str(e),
+                'response': "I'm sorry, I encountered an error processing your request. Please try again."
+            }
+    
+    def generate_response(self, intent_analysis: Dict[str, Any], result: Dict[str, Any], query_type: str) -> str:
+        """Generate human-readable response based on query results"""
+        if not result['success']:
+            return f"I encountered an error: {result['error']}"
+        
+        data = result['data']
+        intents = intent_analysis['intents']
+        
+        if query_type == 'summary':
+            if data and len(data) > 0:
+                row = data[0]
+                response = "Here's a summary of the oceanographic data:\n\n"
+                
+                if 'total_profiles' in row:
+                    response += f"📊 **Total Profiles**: {row['total_profiles']}\n"
+                
+                if 'unique_locations' in row:
+                    response += f"📍 **Unique Locations**: {row['unique_locations']}\n"
+                
+                if 'min_temperature' in row and 'max_temperature' in row:
+                    response += f"🌡️ **Temperature Range**: {row['min_temperature']:.2f}°C to {row['max_temperature']:.2f}°C\n"
+                
+                if 'avg_temperature' in row:
+                    response += f"🌡️ **Average Temperature**: {row['avg_temperature']:.2f}°C\n"
+                
+                if 'min_salinity' in row and 'max_salinity' in row:
+                    response += f"🧂 **Salinity Range**: {row['min_salinity']:.2f} to {row['max_salinity']:.2f} PSU\n"
+                
+                if 'avg_salinity' in row:
+                    response += f"🧂 **Average Salinity**: {row['avg_salinity']:.2f} PSU\n"
+                
+                if 'min_pressure' in row and 'max_pressure' in row:
+                    response += f"💧 **Pressure Range**: {row['min_pressure']:.2f} to {row['max_pressure']:.2f} dbar\n"
+                
+                if 'avg_pressure' in row:
+                    response += f"💧 **Average Pressure**: {row['avg_pressure']:.2f} dbar\n"
+                
+                if 'min_latitude' in row and 'max_latitude' in row:
+                    response += f"🗺️ **Latitude Range**: {row['min_latitude']:.2f}° to {row['max_latitude']:.2f}°\n"
+                
+                if 'min_longitude' in row and 'max_longitude' in row:
+                    response += f"🗺️ **Longitude Range**: {row['min_longitude']:.2f}° to {row['max_longitude']:.2f}°\n"
+                
+                return response
+            else:
+                return "No summary data available."
+        
+        else:  # data query
+            if not data:
+                return "No data found matching your criteria."
+            
+            response = f"Found {len(data)} data points matching your query:\n\n"
+            
+            # Show first few results
+            for i, row in enumerate(data[:5]):  # Show first 5 results
+                response += f"**Profile {i+1}:**\n"
+                
+                if 'LATITUDE' in row and 'LONGITUDE' in row:
+                    response += f"  📍 Location: {row['LATITUDE']:.3f}°N, {row['LONGITUDE']:.3f}°W\n"
+                
+                if 'TEMP' in row:
+                    response += f"  🌡️ Temperature: {row['TEMP']:.2f}°C\n"
+                
+                if 'PSAL' in row:
+                    response += f"  🧂 Salinity: {row['PSAL']:.2f} PSU\n"
+                
+                if 'PRES' in row:
+                    response += f"  💧 Pressure: {row['PRES']:.2f} dbar\n"
+                
+                if 'SOURCE_FILE' in row:
+                    response += f"  📁 Source: {row['SOURCE_FILE']}\n"
+                
+                response += "\n"
+            
+            if len(data) > 5:
+                response += f"... and {len(data) - 5} more results.\n"
+            
+            return response
+    
+    def get_conversation_history(self) -> List[Dict[str, Any]]:
+        """Get conversation history"""
+        return self.conversation_history
+    
+    def clear_history(self):
+        """Clear conversation history"""
+        self.conversation_history = []
+
+if __name__ == "__main__":
+    # Test the chatbot
+    chatbot = AIChatbot()
+    
+    # Test queries
+    test_queries = [
+        "Show me a summary of the data",
+        "Find profiles with temperature above 15 degrees",
+        "What's the salinity range?",
+        "Show me locations with high pressure",
+        "How many profiles are there?"
+    ]
+    
+    for query in test_queries:
+        print(f"\nUser: {query}")
+        result = chatbot.process_user_input(query)
+        print(f"Bot: {result['response']}")
+        print(f"Query: {result.get('query', 'N/A')}")
