@@ -1,0 +1,30 @@
+Downloading 2 files...
+[1/2] D20250627_prof_0.nc
+Traceback (most recent call last):
+  File "C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\datasetconversion\scripts\fast_download.py", line 36, in main
+    print(f"\u2713 {filename}")
+    ~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2713' in position 0: character maps to <undefined>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\datasetconversion\scripts\fast_download.py", line 45, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\seque\Desktop\CODES\HACKATHON\SIH_2025\HackathonThingy\datasetconversion\scripts\fast_download.py", line 39, in main
+    print(f"\u2717 {filename}: {exc}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2717' in position 0: character maps to <undefined>
+Downloading 2 files...
+[1/2] D20250627_prof_0.nc
+[OK] D20250627_prof_0.nc
+[2/2] D20250626_prof_0.nc
+[OK] D20250626_prof_0.nc
+Done in 54.6s
